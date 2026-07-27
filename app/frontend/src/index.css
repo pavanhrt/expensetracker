@@ -1,0 +1,50 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 43 25% 96%;         /* #F7F6F3 */
+    --foreground: 30 6% 11%;           /* #1C1B1A */
+    --card: 0 0% 100%;
+    --card-foreground: 30 6% 11%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 30 6% 11%;
+    --primary: 78 15% 18%;             /* #2C3627 deep forest */
+    --primary-foreground: 43 25% 96%;
+    --secondary: 43 15% 92%;
+    --secondary-foreground: 30 6% 11%;
+    --muted: 43 15% 92%;
+    --muted-foreground: 40 5% 43%;     /* #72706A */
+    --accent: 43 15% 92%;
+    --accent-foreground: 30 6% 11%;
+    --destructive: 8 44% 57%;          /* terracotta */
+    --destructive-foreground: 0 0% 100%;
+    --border: 40 17% 87%;              /* #E5E3DB */
+    --input: 40 17% 87%;
+    --ring: 78 15% 18%;
+    --chart-1: 8 44% 57%;              /* terracotta */
+    --chart-2: 100 10% 45%;            /* moss */
+    --chart-3: 40 20% 40%;
+    --chart-4: 25 30% 50%;
+    --chart-5: 200 15% 40%;
+    --radius: 0.5rem;
+  }
+}
+
+@layer base {
+  * { @apply border-border; }
+  body { @apply bg-background text-foreground; }
+}
+
+@layer base {
+  [data-debug-wrapper="true"] { display: contents !important; }
+  [data-debug-wrapper="true"] > * {
+    margin-left: inherit; margin-right: inherit; margin-top: inherit; margin-bottom: inherit;
+    padding-left: inherit; padding-right: inherit; padding-top: inherit; padding-bottom: inherit;
+    column-gap: inherit; row-gap: inherit; gap: inherit;
+    border-left-width: inherit; border-right-width: inherit; border-top-width: inherit; border-bottom-width: inherit;
+    border-left-style: inherit; border-right-style: inherit; border-top-style: inherit; border-bottom-style: inherit;
+    border-left-color: inherit; border-right-color: inherit; border-top-color: inherit; border-bottom-color: inherit;
+  }
+}
