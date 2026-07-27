@@ -1,12 +1,12 @@
 {
-  "name": "Vartā — Expense Tracker",
-  "short_name": "Vartā",
+  "name": "PRISM AI Expense Tracker",
+  "short_name": "PRISM AI",
   "description": "Voice-enabled personal expense tracker for English and Telugu",
   "start_url": "/dashboard",
   "display": "standalone",
   "background_color": "#F7F6F3",
   "theme_color": "#2C3627",
   "icons": [
-    { "src": "/icon.svg", "sizes": "any", "type": "image/svg+xml" }
+    { "src": "/logo.jpeg", "sizes": "any", "type": "image/jpeg" }
   ]
 }

@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Pencil, Trash2, Check, X } from "lucide-react";
 import { toast } from "@/components/Toast";
+import { categoryTagClass } from "@/lib/categoryColors";
 import type { Expense } from "@/types";
 
 export default function ExpenseList({
@@ -18,7 +19,7 @@ export default function ExpenseList({
   }
 
   return (
-    <div className="divide-y divide-black/5 rounded-xl border border-black/10 bg-white">
+    <div className="divide-y divide-hairline">
       {expenses.map((expense) => (
         <ExpenseRow key={expense.id} expense={expense} categories={categories} />
       ))}
@@ -67,22 +68,22 @@ function ExpenseRow({ expense, categories }: { expense: Expense; categories: str
 
   if (editing) {
     return (
-      <div className="flex flex-wrap items-center gap-2 px-4 py-3">
+      <div className="flex flex-wrap items-center gap-2 bg-panel2 px-4 py-3">
         <input
           value={itemName}
           onChange={(e) => setItemName(e.target.value)}
-          className="min-w-[8rem] flex-1 rounded-md border border-black/10 px-2 py-1 text-sm"
+          className="min-w-[8rem] flex-1 rounded-md border border-hairline bg-panel px-2 py-1 text-sm text-ink"
         />
         <input
           type="number"
           value={amount}
           onChange={(e) => setAmount(parseFloat(e.target.value) || 0)}
-          className="w-24 rounded-md border border-black/10 px-2 py-1 text-sm"
+          className="w-24 rounded-md border border-hairline bg-panel px-2 py-1 text-sm text-ink"
         />
         <select
           value={category}
           onChange={(e) => setCategory(e.target.value)}
-          className="rounded-md border border-black/10 px-2 py-1 text-sm"
+          className="rounded-md border border-hairline bg-panel px-2 py-1 text-sm text-ink"
         >
           {categories.map((c) => (
             <option key={c} value={c}>
@@ -90,7 +91,7 @@ function ExpenseRow({ expense, categories }: { expense: Expense; categories: str
             </option>
           ))}
         </select>
-        <button onClick={save} disabled={busy} className="text-emerald-700 hover:text-emerald-900">
+        <button onClick={save} disabled={busy} className="text-cyan hover:brightness-125">
           <Check size={18} />
         </button>
         <button onClick={() => setEditing(false)} className="text-muted hover:text-ink">
@@ -104,16 +105,21 @@ function ExpenseRow({ expense, categories }: { expense: Expense; categories: str
     <div className="flex items-center justify-between gap-3 px-4 py-3">
       <div className="min-w-0">
         <p className="truncate text-sm font-medium text-ink">{expense.item_name}</p>
-        <p className="text-xs text-muted">
-          {expense.category_name} · {expense.expense_date}
-        </p>
+        <div className="mt-1 flex items-center gap-2">
+          <span className={`rounded-full px-2 py-0.5 font-mono text-[10.5px] ${categoryTagClass(expense.category_name)}`}>
+            {expense.category_name}
+          </span>
+          <span className="font-mono text-[11px] text-muted">{expense.expense_date}</span>
+        </div>
       </div>
       <div className="flex items-center gap-3">
-        <span className="font-medium text-ink">₹{expense.amount.toLocaleString("en-IN")}</span>
+        <span className="font-mono font-medium text-ink">
+          ₹{expense.amount.toLocaleString("en-IN")}
+        </span>
         <button onClick={() => setEditing(true)} className="text-muted hover:text-ink">
           <Pencil size={16} />
         </button>
-        <button onClick={remove} disabled={busy} className="text-muted hover:text-red-600">
+        <button onClick={remove} disabled={busy} className="text-muted hover:text-magenta">
           <Trash2 size={16} />
         </button>
       </div>

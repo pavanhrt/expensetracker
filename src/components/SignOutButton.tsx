@@ -15,10 +15,11 @@ export default function SignOutButton() {
         router.push("/login");
         router.refresh();
       }}
-      className="flex items-center gap-1.5 text-sm text-muted hover:text-ink"
+      title="Sign out"
+      aria-label="Sign out"
+      className="flex h-9 w-9 items-center justify-center rounded-full text-muted transition hover:bg-panel2 hover:text-ink"
     >
       <LogOut size={16} strokeWidth={1.5} />
-      Sign out
     </button>
   );
 }

@@ -1,4 +1,4 @@
--- Vartā expense tracker schema
+-- PRISM AI expense tracker schema
 -- Run this in the Supabase SQL editor (or via `supabase db push`) on a fresh project.
 
 create extension if not exists "uuid-ossp";

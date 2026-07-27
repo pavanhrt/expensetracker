@@ -71,26 +71,39 @@ export default function VoiceRecorder({
     }
   };
 
-  const dim = size === "sm" ? "h-11 w-11" : "h-16 w-16";
-  const icon = size === "sm" ? 18 : 24;
+  const icon = size === "sm" ? 18 : 22;
+  const handleClick = recording ? stop : start;
+  const label = recording ? "Stop recording" : "Start voice recording";
+
+  const iconEl = uploading ? (
+    <Loader2 size={icon} className="animate-spin" strokeWidth={1.5} />
+  ) : recording ? (
+    <Square size={icon} strokeWidth={1.5} />
+  ) : (
+    <Mic size={icon} strokeWidth={1.5} />
+  );
+
+  if (size === "sm") {
+    return (
+      <button
+        type="button"
+        onClick={handleClick}
+        disabled={uploading}
+        aria-label={label}
+        className="mic-btn h-11 w-11 text-ink transition disabled:opacity-60"
+      >
+        {iconEl}
+      </button>
+    );
+  }
 
   return (
-    <button
-      type="button"
-      onClick={recording ? stop : start}
-      disabled={uploading}
-      aria-label={recording ? "Stop recording" : "Start voice recording"}
-      className={`${dim} rounded-full flex items-center justify-center bg-ink text-paper hover:bg-inkDark disabled:opacity-60 transition-transform ${
-        recording ? "voice-recording" : ""
-      }`}
-    >
-      {uploading ? (
-        <Loader2 size={icon} className="animate-spin" strokeWidth={1.5} />
-      ) : recording ? (
-        <Square size={icon} strokeWidth={1.5} />
-      ) : (
-        <Mic size={icon} strokeWidth={1.5} />
-      )}
+    <button type="button" onClick={handleClick} disabled={uploading} aria-label={label}>
+      <div className={`mic-ring ${recording ? "recording" : ""}`}>
+        <div className="mic-btn h-[60px] w-[60px] text-ink transition disabled:opacity-60">
+          {iconEl}
+        </div>
+      </div>
     </button>
   );
 }

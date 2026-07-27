@@ -21,6 +21,8 @@ export default async function ExpensesPage({
   } = await supabase.auth.getUser();
   if (!user) redirect("/login");
 
+  const userLabel = (user.user_metadata?.name as string) || user.email || "?";
+
   const { date: dateParam } = await searchParams;
   const date = dateParam || todayISO();
 
@@ -57,30 +59,37 @@ export default async function ExpensesPage({
 
   return (
     <div className="min-h-screen">
-      <Nav />
+      <Nav userLabel={userLabel} />
       <main className="mx-auto max-w-3xl space-y-6 px-4 py-6">
         <AddExpenseForm />
 
-        <div className="rounded-xl border border-black/10 bg-white p-4">
-          <div className="mb-4 flex items-center justify-between">
-            <Link href={`/expenses?date=${prevDate}`} className="text-sm text-muted hover:text-ink">
-              ← {prevDate}
-            </Link>
-            <div className="text-center">
-              <p className="text-sm font-medium text-ink">{format(parsedDate, "EEEE, MMM d")}</p>
-              <p className="text-xs text-muted">₹{dayTotal.toLocaleString("en-IN")}</p>
-            </div>
-            <Link href={`/expenses?date=${nextDate}`} className="text-sm text-muted hover:text-ink">
-              {nextDate} →
-            </Link>
+        <div className="flex items-center gap-2.5">
+          <Link
+            href={`/expenses?date=${prevDate}`}
+            className="font-mono text-xs text-muted hover:text-ink"
+          >
+            ← {prevDate}
+          </Link>
+          <span className="h-px flex-1 bg-gradient-to-r from-cyan via-violet to-lime opacity-40" />
+          <div className="text-center font-mono text-xs uppercase tracking-[0.06em] text-muted">
+            {format(parsedDate, "EEEE, MMM d")} · ₹{dayTotal.toLocaleString("en-IN")}
           </div>
+          <span className="h-px flex-1 bg-gradient-to-r from-lime via-magenta to-cyan opacity-40" />
+          <Link
+            href={`/expenses?date=${nextDate}`}
+            className="font-mono text-xs text-muted hover:text-ink"
+          >
+            {nextDate} →
+          </Link>
+        </div>
 
+        <div className="overflow-hidden rounded-panel border border-hairline bg-panel">
           <ExpenseList expenses={expenses} categories={categories} />
         </div>
 
         <a
           href="/api/expenses/export"
-          className="inline-block text-sm text-muted hover:text-ink underline underline-offset-2"
+          className="inline-block font-mono text-xs text-muted underline underline-offset-4 hover:text-ink"
         >
           Export this month as CSV
         </a>

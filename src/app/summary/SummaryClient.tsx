@@ -2,9 +2,8 @@
 
 import { useState } from "react";
 import { Loader2, Send } from "lucide-react";
-import LanguageToggle from "@/components/LanguageToggle";
+import { useLanguage } from "@/context/LanguageContext";
 import VoiceRecorder from "@/components/VoiceRecorder";
-import type { Language } from "@/types";
 
 interface Turn {
   question: string;
@@ -15,7 +14,7 @@ const SUGGESTIONS_EN = ["How much did I spend this month?", "How much on food th
 const SUGGESTIONS_TE = ["ఈ నెల ఎంత ఖర్చు చేశాను?", "ఈ వారం ఆహారం మీద ఎంత ఖర్చు?", "గత నెలతో పోల్చండి"];
 
 export default function SummaryClient() {
-  const [language, setLanguage] = useState<Language>("en");
+  const { language } = useLanguage();
   const [question, setQuestion] = useState("");
   const [asking, setAsking] = useState(false);
   const [turns, setTurns] = useState<Turn[]>([]);
@@ -44,12 +43,12 @@ export default function SummaryClient() {
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between">
-        <h1 className="text-lg font-semibold text-ink">Ask about your spending</h1>
-        <LanguageToggle value={language} onChange={setLanguage} />
+      <div>
+        <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted">Ask</p>
+        <h1 className="font-display text-xl font-semibold text-ink">Ask about your spending</h1>
       </div>
 
-      <div className="min-h-[12rem] space-y-3 rounded-xl border border-black/10 bg-white p-4">
+      <div className="min-h-[12rem] space-y-4 rounded-panel border border-hairline bg-panel p-5">
         {turns.length === 0 && (
           <div className="space-y-2">
             <p className="text-sm text-muted">Try asking:</p>
@@ -58,7 +57,7 @@ export default function SummaryClient() {
                 <button
                   key={s}
                   onClick={() => ask(s)}
-                  className="rounded-full border border-black/10 px-3 py-1 text-xs text-muted hover:border-ink hover:text-ink"
+                  className="rounded-full border border-hairline px-3 py-1 font-mono text-xs text-muted transition hover:border-cyan hover:text-ink"
                 >
                   {s}
                 </button>
@@ -72,7 +71,7 @@ export default function SummaryClient() {
             <p className="text-sm text-muted">{t.answer}</p>
           </div>
         ))}
-        {asking && <Loader2 className="animate-spin text-muted" size={18} />}
+        {asking && <Loader2 className="animate-spin text-cyan" size={18} />}
       </div>
 
       <div className="flex items-center gap-2">
@@ -81,12 +80,12 @@ export default function SummaryClient() {
           onChange={(e) => setQuestion(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && ask(question)}
           placeholder={language === "en" ? "Ask a question…" : "ప్రశ్న అడగండి…"}
-          className="flex-1 rounded-lg border border-black/10 px-3 py-2 text-sm outline-none focus:border-ink"
+          className="flex-1 rounded-lg border border-hairline bg-panel2 px-3 py-2 text-sm text-ink outline-none placeholder:text-muted focus:border-cyan"
         />
         <button
           onClick={() => ask(question)}
           disabled={asking || !question.trim()}
-          className="flex h-10 w-10 items-center justify-center rounded-lg bg-ink text-paper hover:bg-inkDark disabled:opacity-60"
+          className="flex h-11 w-11 items-center justify-center rounded-lg bg-lime text-canvas transition hover:brightness-110 disabled:opacity-60"
         >
           <Send size={16} />
         </button>

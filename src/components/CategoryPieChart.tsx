@@ -2,7 +2,17 @@
 
 import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from "recharts";
 
-const COLORS = ["#2C3627", "#5A6E4C", "#8CA37A", "#B9C7A6", "#72706A", "#A69F91", "#D8CFC0", "#E4B36A", "#C77B4F"];
+const COLORS = [
+  "#22d3ee", // cyan
+  "#a855f7", // violet
+  "#ec4899", // magenta
+  "#d7ff3d", // lime
+  "#38bdf8", // sky
+  "#f472b6", // pink
+  "#c084fc", // light violet
+  "#a3e635", // light lime
+  "#8b8b96", // muted (fallback / "Other")
+];
 
 export default function CategoryPieChart({
   data,
@@ -18,10 +28,21 @@ export default function CategoryPieChart({
       <PieChart>
         <Pie data={data} dataKey="total" nameKey="category" innerRadius={55} outerRadius={90} paddingAngle={2}>
           {data.map((_, i) => (
-            <Cell key={i} fill={COLORS[i % COLORS.length]} />
+            <Cell key={i} fill={COLORS[i % COLORS.length]} stroke="#08080b" strokeWidth={1} />
           ))}
         </Pie>
-        <Tooltip formatter={(value: number) => `₹${value.toLocaleString("en-IN")}`} />
+        <Tooltip
+          formatter={(value: number) => `₹${value.toLocaleString("en-IN")}`}
+          contentStyle={{
+            background: "#15151b",
+            border: "1px solid rgba(255,255,255,0.08)",
+            borderRadius: 10,
+            color: "#f2f2f5",
+            fontSize: 12,
+          }}
+          itemStyle={{ color: "#f2f2f5" }}
+          labelStyle={{ color: "#8b8b96" }}
+        />
       </PieChart>
     </ResponsiveContainer>
   );
