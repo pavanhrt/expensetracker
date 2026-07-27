@@ -15,9 +15,13 @@ Anthropic API credits (a Claude Pro/Max subscription doesn't include API access)
 ## 1. Set up Supabase
 
 1. Create a project at [supabase.com](https://supabase.com).
-2. In the SQL Editor, run `supabase/migrations/0001_init.sql`. This creates the `users`,
-   `categories`, `expenses` tables, seeds default categories for new signups, sets up row-level
-   security, and adds the `query_expense_summary` function the AI Q&A feature uses.
+2. In the SQL Editor, run the migrations in order:
+   - `0001_init.sql` — `users`, `categories`, `expenses` tables, seeds default categories for new
+     signups, sets up row-level security.
+   - `0002_search_expenses.sql` then `0003_search_expenses_word_match.sql` — the `search_expenses`
+     function the Q&A tool uses to look up a specific named item (0003 supersedes 0002's matching
+     logic, same function name, safe to run both in order).
+   - Also needs `query_expense_summary`, defined at the bottom of `0001_init.sql`.
 3. In **Authentication → URL Configuration**, add `http://localhost:3000/auth/callback` (and your
    deployed URL's equivalent) as a redirect URL.
 4. Copy your Project URL, anon key, and service role key from **Project Settings → API**.
@@ -84,14 +88,20 @@ Push to a repo and import into Vercel; add the same env vars there (using your p
 
 - `src/app/api/expenses/text|voice` — parse a note into **draft** line items (nothing saved yet).
 - `src/app/api/expenses` — POST saves confirmed drafts; GET returns a day or month's ledger.
-- `src/app/api/query` — natural-language question → Groq + `query_expenses` tool → answer.
+- `src/app/api/query` — natural-language question → Groq + two tools (`query_expenses` for
+  category-level totals, `search_expenses` for a specific named item) → answer. The model is
+  prompted to use category totals for whole-category questions and the item search for anything
+  that isn't literally one of the category names (see `src/lib/claude/prompts.ts`).
 - `src/lib/claude/prompts.ts` / `src/lib/claude/client.ts` — the parsing and Q&A system prompts,
-  tool schema, and the Groq chat-completions calls (kept as named exports so edge cases can be
+  tool schemas, and the Groq chat-completions calls (kept as named exports so edge cases can be
   iterated on without touching route handlers; folder name is a holdover, not a dependency).
+- `src/lib/dates.ts` — includes `normalizeExclusiveRange`, a safety net for a date-range mistake
+  the model occasionally makes (passing the same start/end date for a "today" question, which
+  matches zero rows under our exclusive-end-date convention).
 - `src/lib/stt/` — STT provider interface; swap providers via `STT_PROVIDER`, not by touching
   UI or route code.
-- `supabase/migrations/0001_init.sql` — schema, RLS policies, and the `query_expense_summary`
-  function the Q&A tool calls (parameterized, scoped to `auth.uid()`).
+- `supabase/migrations/` — `0001_init.sql` (schema, RLS, `query_expense_summary`), `0002` /
+  `0003` (the `search_expenses` function, parameterized and scoped to `auth.uid()` like the rest).
 
 ## Build phase status
 
@@ -101,7 +111,10 @@ Push to a repo and import into Vercel; add the same env vars there (using your p
 - [x] Phase 4 — Natural-language summaries (`/api/query` + tool use)
 - [x] Phase 5 — Polish (charts, edit/delete UI, PWA manifest, CSV export)
 
-All five phases are coded end-to-end. What's untested: this environment couldn't reach the npm
-registry or run a live Supabase/Groq call to verify at runtime (sandbox network policy) —
-run `npm install && npm run build` and click through the flows once your `.env.local` is filled
-in before treating this as production-ready.
+All five phases are coded and have been exercised live (auth, text parsing, and Q&A all confirmed
+working against real Supabase + Groq calls). One known limitation to keep in mind: Groq's free
+Llama 3.3 model is noticeably weaker than Claude at fuzzy reasoning, so the Q&A prompts and tools
+have some extra guardrails (word-based item search, category-name matching, date-range
+normalization) to compensate — if you hit another wrong-answer case, the fix is usually in
+`src/lib/claude/prompts.ts` (tighten the instructions) or the `runQuery`/`runSearch` handlers in
+`src/app/api/query/route.ts` (add another safety net), not a sign of a deeper bug.
