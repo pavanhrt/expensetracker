@@ -40,7 +40,7 @@ export function Toaster() {
       {items.map((item) => (
         <div
           key={item.id}
-          className="pointer-events-auto rounded-lg bg-ink px-4 py-2 text-sm text-paper shadow-lg"
+          className="pointer-events-auto rounded-lg border border-hairline bg-panel px-4 py-2 text-sm text-ink shadow-lg"
         >
           {item.message}
         </div>

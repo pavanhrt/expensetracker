@@ -10,17 +10,19 @@ export default function LanguageToggle({
   onChange: (lang: Language) => void;
 }) {
   return (
-    <div className="inline-flex rounded-full border border-black/10 bg-white p-0.5 text-sm">
+    <div className="inline-flex rounded-full border border-hairline bg-panel p-[3px] font-mono text-xs">
       {(["en", "te"] as const).map((lang) => (
         <button
           key={lang}
           type="button"
           onClick={() => onChange(lang)}
-          className={`rounded-full px-3 py-1 transition ${
-            value === lang ? "bg-ink text-paper" : "text-muted hover:text-ink"
+          className={`rounded-full px-3.5 py-[7px] transition ${
+            value === lang
+              ? "bg-gradient-to-br from-cyan to-violet font-semibold text-canvas"
+              : "text-muted hover:text-ink"
           }`}
         >
-          {lang === "en" ? "English" : "తెలుగు"}
+          {lang === "en" ? "EN" : "TE"}
         </button>
       ))}
     </div>

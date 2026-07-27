@@ -18,11 +18,23 @@ export default function MonthlyTrendChart({
           dataKey="date"
           tickFormatter={(d: string) => d.slice(5)}
           fontSize={11}
-          stroke="#72706A"
+          stroke="#8b8b96"
         />
-        <YAxis fontSize={11} stroke="#72706A" width={36} />
-        <Tooltip formatter={(value: number) => `₹${value.toLocaleString("en-IN")}`} />
-        <Bar dataKey="total" fill="#2C3627" radius={[3, 3, 0, 0]} />
+        <YAxis fontSize={11} stroke="#8b8b96" width={36} />
+        <Tooltip
+          formatter={(value: number) => `₹${value.toLocaleString("en-IN")}`}
+          contentStyle={{
+            background: "#15151b",
+            border: "1px solid rgba(255,255,255,0.08)",
+            borderRadius: 10,
+            color: "#f2f2f5",
+            fontSize: 12,
+          }}
+          itemStyle={{ color: "#f2f2f5" }}
+          labelStyle={{ color: "#8b8b96" }}
+          cursor={{ fill: "rgba(255,255,255,0.04)" }}
+        />
+        <Bar dataKey="total" fill="#22d3ee" radius={[3, 3, 0, 0]} />
       </BarChart>
     </ResponsiveContainer>
   );

@@ -1,4 +1,4 @@
-# Vartā — Voice-Enabled Expense Tracker
+# PRISM AI Expense Tracker
 
 Log expenses by speaking or typing in English or Telugu ("idols 4000, oil 100, recharge 400"),
 get them split into categorized line items, confirm, and ask natural-language questions like

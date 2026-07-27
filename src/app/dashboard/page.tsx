@@ -15,6 +15,8 @@ export default async function DashboardPage() {
   } = await supabase.auth.getUser();
   if (!user) redirect("/login");
 
+  const userLabel = (user.user_metadata?.name as string) || user.email || "?";
+
   const month = currentMonth();
   const { start, endExclusive } = monthRange(month);
   const { start: prevStart, endExclusive: prevEnd } = monthRange(previousMonth(month));
@@ -53,6 +55,7 @@ export default async function DashboardPage() {
   const byCategory = Array.from(byCategoryMap.entries())
     .map(([category, total]) => ({ category, total }))
     .sort((a, b) => b.total - a.total);
+  const topCategory = byCategory[0]?.category ?? "—";
 
   const trendMap = new Map<string, number>();
   for (const r of trendRows ?? []) {
@@ -64,28 +67,34 @@ export default async function DashboardPage() {
 
   return (
     <div className="min-h-screen">
-      <Nav />
+      <Nav userLabel={userLabel} />
       <main className="mx-auto max-w-3xl space-y-6 px-4 py-6">
         <AddExpenseForm />
 
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-          <StatCard label="This month" value={monthTotal} />
-          <StatCard label="Last month" value={prevTotal} />
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-4">
+          <StatCard label="Spent this month" value={monthTotal} accent="text-cyan" />
+          <StatCard label="Spent last month" value={prevTotal} accent="text-violet" />
           <StatCard
-            label="Change"
+            label="Change vs last month"
             value={deltaPct === null ? null : Math.round(deltaPct)}
             suffix={deltaPct === null ? "" : "%"}
             isPct
+            accent="text-lime"
           />
+          <StatCard label="Top category" text={topCategory} accent="text-magenta" />
         </div>
 
-        <div className="rounded-xl border border-black/10 bg-white p-4">
-          <h2 className="mb-2 text-sm font-medium text-ink">By category</h2>
+        <div className="rounded-panel border border-hairline bg-panel p-5">
+          <h2 className="mb-3 font-mono text-xs uppercase tracking-[0.14em] text-muted">
+            By category
+          </h2>
           <CategoryPieChart data={byCategory} />
         </div>
 
-        <div className="rounded-xl border border-black/10 bg-white p-4">
-          <h2 className="mb-2 text-sm font-medium text-ink">Daily trend this month</h2>
+        <div className="rounded-panel border border-hairline bg-panel p-5">
+          <h2 className="mb-3 font-mono text-xs uppercase tracking-[0.14em] text-muted">
+            Daily trend this month
+          </h2>
           <MonthlyTrendChart data={trend} />
         </div>
       </main>
@@ -96,20 +105,30 @@ export default async function DashboardPage() {
 function StatCard({
   label,
   value,
+  text,
   suffix,
   isPct,
+  accent,
 }: {
   label: string;
-  value: number | null;
+  value?: number | null;
+  text?: string;
   suffix?: string;
   isPct?: boolean;
+  accent: string;
 }) {
+  const display =
+    text ??
+    (value === null || value === undefined
+      ? "—"
+      : isPct
+        ? `${value > 0 ? "+" : ""}${value}${suffix}`
+        : `₹${value.toLocaleString("en-IN")}`);
+
   return (
-    <div className="rounded-xl border border-black/10 bg-white p-4">
-      <p className="text-xs text-muted">{label}</p>
-      <p className="mt-1 text-xl font-semibold text-ink">
-        {value === null ? "—" : isPct ? `${value > 0 ? "+" : ""}${value}${suffix}` : `₹${value.toLocaleString("en-IN")}`}
-      </p>
+    <div className="rounded-panel border border-hairline bg-panel p-4">
+      <p className="font-mono text-[11px] uppercase tracking-[0.1em] text-muted">{label}</p>
+      <p className={`mt-1.5 font-display text-xl font-semibold ${accent}`}>{display}</p>
     </div>
   );
 }

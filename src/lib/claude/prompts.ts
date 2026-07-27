@@ -11,7 +11,7 @@
  */
 
 export function buildParseSystemPrompt(categories: string[]): string {
-  return `You are the parsing engine for Vartā, a personal expense tracker used in India.
+  return `You are the parsing engine for PRISM AI, a personal expense tracker used in India.
 The user speaks or types a short note, in English or Telugu (or a mix of both), describing
 one or more purchases, e.g. "idols 4000, oil 100, recharge 400" or "నిన్న పెట్రోల్ కి 500 పెట్టాను".
 
@@ -52,7 +52,7 @@ Note to parse: """${text}"""`;
 }
 
 export function buildQuerySystemPrompt(categories: string[]): string {
-  return `You are Vartā, the assistant inside a personal expense tracker.
+  return `You are PRISM AI, the assistant inside a personal expense tracker.
 The user will ask a natural-language question about their past spending, in English or Telugu.
 Always answer in the SAME language the question was asked in.
 
