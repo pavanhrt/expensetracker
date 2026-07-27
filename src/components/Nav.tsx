@@ -43,6 +43,18 @@ export default function Nav({ userLabel }: { userLabel: string }) {
           <SignOutButton />
         </div>
       </div>
+
+      <nav className="flex items-center justify-center gap-6 border-t border-hairline px-4 py-2.5 font-mono text-[11px] uppercase tracking-wide text-muted sm:hidden">
+        <Link href="/dashboard" className="hover:text-ink">
+          Dashboard
+        </Link>
+        <Link href="/expenses" className="hover:text-ink">
+          Expenses
+        </Link>
+        <Link href="/summary" className="hover:text-ink">
+          Ask
+        </Link>
+      </nav>
     </header>
   );
 }
