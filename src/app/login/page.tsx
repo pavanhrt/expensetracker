@@ -2,6 +2,7 @@
 
 import { useActionState, useState } from "react";
 import { useFormStatus } from "react-dom";
+import { APP_SHORT_NAME, LOGO_PATH, WORDMARK_ACCENT, WORDMARK_SUFFIX } from "@/lib/theme";
 import { authenticate, type AuthFormState } from "./actions";
 
 function SubmitButton({ label }: { label: string }) {
@@ -28,12 +29,13 @@ export default function LoginPage() {
       <div className="w-full max-w-sm space-y-6">
         <div className="text-center">
           <img
-            src="/logo.jpeg"
-            alt="PRISM AI"
+            src={LOGO_PATH}
+            alt={APP_SHORT_NAME}
             className="mx-auto mb-3 h-20 w-20 rounded-full object-cover shadow-lg"
           />
           <h1 className="font-display text-2xl font-semibold text-ink">
-            <span className="text-lime">PRISM</span>. Expense Tracker
+            <span className="text-lime">{WORDMARK_ACCENT}</span>
+            {WORDMARK_SUFFIX}
           </h1>
           <p className="mt-1 text-sm text-muted">
             Speak or type your expenses in English or Telugu.

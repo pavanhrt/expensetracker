@@ -3,6 +3,7 @@ import { IBM_Plex_Mono, Inter, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/Toast";
 import { LanguageProvider } from "@/context/LanguageContext";
+import { APP_NAME, LOGO_PATH } from "@/lib/theme";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter", weight: ["400", "500", "600"] });
 const spaceGrotesk = Space_Grotesk({
@@ -17,10 +18,10 @@ const ibmPlexMono = IBM_Plex_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "PRISM AI Expense Tracker",
+  title: APP_NAME,
   description: "Voice-enabled personal expense tracker for English and Telugu",
   manifest: "/manifest.json",
-  icons: { icon: "/logo.jpeg" },
+  icons: { icon: LOGO_PATH },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

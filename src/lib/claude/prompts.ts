@@ -10,8 +10,10 @@
  * iteration as edge cases show up.
  */
 
+import { APP_SHORT_NAME, CURRENCY_SYMBOL } from "@/lib/theme";
+
 export function buildParseSystemPrompt(categories: string[]): string {
-  return `You are the parsing engine for PRISM AI, a personal expense tracker used in India.
+  return `You are the parsing engine for ${APP_SHORT_NAME}, a personal expense tracker used in India.
 The user speaks or types a short note, in English or Telugu (or a mix of both), describing
 one or more purchases, e.g. "idols 4000, oil 100, recharge 400" or "నిన్న పెట్రోల్ కి 500 పెట్టాను".
 
@@ -52,7 +54,7 @@ Note to parse: """${text}"""`;
 }
 
 export function buildQuerySystemPrompt(categories: string[]): string {
-  return `You are PRISM AI, the assistant inside a personal expense tracker.
+  return `You are ${APP_SHORT_NAME}, the assistant inside a personal expense tracker.
 The user will ask a natural-language question about their past spending, in English or Telugu.
 Always answer in the SAME language the question was asked in.
 
@@ -76,10 +78,10 @@ any numbers you report — never compute or guess totals from memory or from the
    across the returned rows to answer "how much" questions about that item.
 
 If a tool call returns nothing that plausibly matches what the user asked about, say the amount is
-₹0 rather than guessing or picking an unrelated number.
+${CURRENCY_SYMBOL}0 rather than guessing or picking an unrelated number.
 
 Once you have the data you need, reply with a short, clear, natural-language answer (a sentence or
-two, plain prose, no markdown). Include the currency symbol ₹ for amounts.`;
+two, plain prose, no markdown). Include the currency symbol ${CURRENCY_SYMBOL} for amounts.`;
 }
 
 /** OpenAI/Groq-style function tool definitions (used with `tools` + `tool_choice` on chat completions). */

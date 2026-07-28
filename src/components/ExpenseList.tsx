@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { Pencil, Trash2, Check, X } from "lucide-react";
 import { toast } from "@/components/Toast";
 import { categoryTagClass } from "@/lib/categoryColors";
+import { formatCurrency } from "@/lib/theme";
 import type { Expense } from "@/types";
 
 export default function ExpenseList({
@@ -114,7 +115,7 @@ function ExpenseRow({ expense, categories }: { expense: Expense; categories: str
       </div>
       <div className="flex items-center gap-3">
         <span className="font-mono font-medium text-ink">
-          ₹{expense.amount.toLocaleString("en-IN")}
+          {formatCurrency(expense.amount)}
         </span>
         <button onClick={() => setEditing(true)} className="text-muted hover:text-ink">
           <Pencil size={16} />

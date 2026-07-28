@@ -5,13 +5,13 @@ import {
   queryExpensesTool,
   searchExpensesTool,
 } from "./prompts";
+import { GROQ_CHAT_ENDPOINT, GROQ_LLM_MODEL, LLM_MAX_TOOL_TURNS, LLM_TEMPERATURE } from "@/lib/config";
 import type { DraftLineItem, Language } from "@/types";
 
 // Free-tier Groq chat completions (OpenAI-compatible), same account as the
-// speech-to-text provider — no Anthropic credits required. Swap GROQ_LLM_MODEL
-// if you want a different hosted model; must support tool calling for /api/query.
-const GROQ_CHAT_ENDPOINT = "https://api.groq.com/openai/v1/chat/completions";
-const MODEL = process.env.GROQ_LLM_MODEL || "llama-3.3-70b-versatile";
+// speech-to-text provider — no Anthropic credits required. Endpoint, model,
+// and tuning are centralized in src/lib/config.ts (env-overridable); must
+// support tool calling for /api/query if you swap GROQ_LLM_MODEL.
 
 function apiKey(): string {
   const key = process.env.GROQ_API_KEY;
@@ -30,7 +30,7 @@ async function groqChat(body: Record<string, unknown>): Promise<any> {
       "Content-Type": "application/json",
       Authorization: `Bearer ${apiKey()}`,
     },
-    body: JSON.stringify({ model: MODEL, ...body }),
+    body: JSON.stringify({ model: GROQ_LLM_MODEL, ...body }),
   });
   if (!res.ok) {
     throw new Error(`Groq chat request failed: ${res.status} ${await res.text()}`);
@@ -53,7 +53,7 @@ export async function parseExpenseNote(params: {
       { role: "user", content: buildParseUserPrompt({ text, todayISO, language }) },
     ],
     response_format: { type: "json_object" },
-    temperature: 0,
+    temperature: LLM_TEMPERATURE,
   });
 
   const raw: string | undefined = data?.choices?.[0]?.message?.content;
@@ -128,12 +128,12 @@ export async function answerExpenseQuery(params: {
     },
   ];
 
-  for (let turn = 0; turn < 4; turn++) {
+  for (let turn = 0; turn < LLM_MAX_TOOL_TURNS; turn++) {
     const data = await groqChat({
       messages,
       tools: [queryExpensesTool, searchExpensesTool],
       tool_choice: "auto",
-      temperature: 0,
+      temperature: LLM_TEMPERATURE,
     });
 
     const message = data?.choices?.[0]?.message;

@@ -1,10 +1,10 @@
 import type { SttProvider } from "./index";
+import {
+  BHASHINI_ASR_ENDPOINT,
+  BHASHINI_COMPUTE_ENDPOINT,
+  BHASHINI_SAMPLE_RATE,
+} from "@/lib/config";
 import type { Language } from "@/types";
-
-const BHASHINI_ASR_ENDPOINT =
-  "https://meity-auth.ulcacontrib.org/ulca/apis/v0/model/getModelsPipeline";
-const BHASHINI_COMPUTE_ENDPOINT =
-  "https://dhruva-api.bhashini.gov.in/services/inference/pipeline";
 
 // Bhashini's ASR model ids for the languages we support (from their public catalog).
 const LANGUAGE_CODES: Record<Language, string> = { en: "en", te: "te" };
@@ -49,7 +49,7 @@ export class BhashiniSttProvider implements SttProvider {
               language: { sourceLanguage },
               serviceId: pipelineId,
               audioFormat: "webm",
-              samplingRate: 16000,
+              samplingRate: BHASHINI_SAMPLE_RATE,
             },
           },
         ],
@@ -74,6 +74,3 @@ export class BhashiniSttProvider implements SttProvider {
     return transcript;
   }
 }
-
-// Re-exported for anyone inspecting the module directly.
-export { BHASHINI_ASR_ENDPOINT };

@@ -1,7 +1,6 @@
 import type { SttProvider } from "./index";
+import { GROQ_TRANSCRIPTION_ENDPOINT, GROQ_WHISPER_MODEL } from "@/lib/config";
 import type { Language } from "@/types";
-
-const GROQ_TRANSCRIPTION_ENDPOINT = "https://api.groq.com/openai/v1/audio/transcriptions";
 
 // Whisper's ISO-639-1 language codes happen to match our Language type directly.
 const WHISPER_LANGUAGE_CODES: Record<Language, string> = { en: "en", te: "te" };
@@ -26,7 +25,7 @@ export class GroqSttProvider implements SttProvider {
 
     const form = new FormData();
     form.append("file", new Blob([Uint8Array.from(audio)], { type: "audio/webm" }), "audio.webm");
-    form.append("model", "whisper-large-v3-turbo");
+    form.append("model", GROQ_WHISPER_MODEL);
     form.append("language", WHISPER_LANGUAGE_CODES[language] ?? "en");
     form.append("response_format", "json");
 
