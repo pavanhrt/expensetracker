@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useLanguage } from "@/context/LanguageContext";
+import { APP_SHORT_NAME, COMPANY_NAME, LOGO_PATH, WORDMARK_ACCENT, WORDMARK_SUFFIX } from "@/lib/theme";
 import LanguageToggle from "./LanguageToggle";
 import Avatar from "./Avatar";
 import SignOutButton from "./SignOutButton";
@@ -13,15 +14,14 @@ export default function Nav({ userLabel }: { userLabel: string }) {
     <header className="border-b border-hairline">
       <div className="mx-auto flex max-w-3xl items-center justify-between px-4 py-5">
         <Link href="/dashboard" className="flex items-center gap-3">
-          <img src="/logo.jpeg" alt="PRISM AI" className="h-11 w-11 rounded-[11px] object-cover" />
+          <img src={LOGO_PATH} alt={APP_SHORT_NAME} className="h-11 w-11 rounded-[11px] object-cover" />
           <span className="leading-tight">
             <span className="block font-display text-lg font-semibold">
-              <span className="text-lime">PRISM</span>
-              <span className="text-ink">.</span>
-              <span className="text-ink"> Expense Tracker</span>
+              <span className="text-lime">{WORDMARK_ACCENT}</span>
+              <span className="text-ink">{WORDMARK_SUFFIX}</span>
             </span>
             <span className="block font-mono text-[11px] uppercase tracking-[0.14em] text-muted">
-              PRISM AI Technologies
+              {COMPANY_NAME}
             </span>
           </span>
         </Link>

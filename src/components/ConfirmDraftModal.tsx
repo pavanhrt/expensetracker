@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Trash2, X } from "lucide-react";
+import { formatCurrency } from "@/lib/theme";
 import type { DraftLineItem, DraftParseResponse, InputMode } from "@/types";
 
 export default function ConfirmDraftModal({
@@ -133,7 +134,7 @@ export default function ConfirmDraftModal({
           <span className="text-sm text-muted">
             Total:{" "}
             <span className="font-mono font-medium text-lime">
-              ₹{total.toLocaleString("en-IN")}
+              {formatCurrency(total)}
             </span>
           </span>
           <div className="flex gap-2">

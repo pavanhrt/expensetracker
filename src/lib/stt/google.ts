@@ -1,4 +1,5 @@
 import type { SttProvider } from "./index";
+import { GOOGLE_STT_ENCODING, GOOGLE_STT_ENDPOINT, GOOGLE_STT_SAMPLE_RATE } from "@/lib/config";
 import type { Language } from "@/types";
 
 const GOOGLE_LANGUAGE_CODES: Record<Language, string> = {
@@ -19,14 +20,14 @@ export class GoogleSttProvider implements SttProvider {
     }
 
     const res = await fetch(
-      `https://speech.googleapis.com/v1/speech:recognize?key=${apiKey}`,
+      `${GOOGLE_STT_ENDPOINT}?key=${apiKey}`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           config: {
-            encoding: "WEBM_OPUS",
-            sampleRateHertz: 48000,
+            encoding: GOOGLE_STT_ENCODING,
+            sampleRateHertz: GOOGLE_STT_SAMPLE_RATE,
             languageCode: GOOGLE_LANGUAGE_CODES[language] ?? "en-IN",
           },
           audio: { content: audio.toString("base64") },

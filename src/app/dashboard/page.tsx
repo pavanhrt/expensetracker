@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { currentMonth, monthRange, previousMonth } from "@/lib/dates";
+import { formatCurrency } from "@/lib/theme";
 import Nav from "@/components/Nav";
 import AddExpenseForm from "@/components/AddExpenseForm";
 import CategoryPieChart from "@/components/CategoryPieChart";
@@ -123,7 +124,7 @@ function StatCard({
       ? "—"
       : isPct
         ? `${value > 0 ? "+" : ""}${value}${suffix}`
-        : `₹${value.toLocaleString("en-IN")}`);
+        : formatCurrency(value));
 
   return (
     <div className="rounded-panel border border-hairline bg-panel p-4">

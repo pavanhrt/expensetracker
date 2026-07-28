@@ -1,3 +1,4 @@
+import { DEFAULT_STT_PROVIDER } from "@/lib/config";
 import type { Language } from "@/types";
 
 export interface SttProvider {
@@ -11,7 +12,7 @@ export interface SttProvider {
  * STT_PROVIDER in .env and, if needed, this file, nowhere else.
  */
 export async function getSttProvider(): Promise<SttProvider> {
-  const provider = (process.env.STT_PROVIDER || "groq").toLowerCase();
+  const provider = (process.env.STT_PROVIDER || DEFAULT_STT_PROVIDER).toLowerCase();
   switch (provider) {
     case "google": {
       const { GoogleSttProvider } = await import("./google");

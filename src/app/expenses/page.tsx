@@ -3,6 +3,7 @@ import Link from "next/link";
 import { addDays, format, parseISO } from "date-fns";
 import { createClient } from "@/lib/supabase/server";
 import { todayISO } from "@/lib/dates";
+import { formatCurrency } from "@/lib/theme";
 import Nav from "@/components/Nav";
 import AddExpenseForm from "@/components/AddExpenseForm";
 import ExpenseList from "@/components/ExpenseList";
@@ -72,7 +73,7 @@ export default async function ExpensesPage({
           </Link>
           <span className="h-px flex-1 bg-gradient-to-r from-cyan via-violet to-lime opacity-40" />
           <div className="text-center font-mono text-xs uppercase tracking-[0.06em] text-muted">
-            {format(parsedDate, "EEEE, MMM d")} · ₹{dayTotal.toLocaleString("en-IN")}
+            {format(parsedDate, "EEEE, MMM d")} · {formatCurrency(dayTotal)}
           </div>
           <span className="h-px flex-1 bg-gradient-to-r from-lime via-magenta to-cyan opacity-40" />
           <Link
